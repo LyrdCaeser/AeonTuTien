@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.aeontutien.game" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>Aeon Tu Tien</name>
+  <name>Aeon Tu Tiên</name>
   <description>Web RPG built with React, Vite and Phaser.</description>
   <author email="trinhvu24689@gmail.com">AI The Ky 22</author>
   <content src="index.html" />
