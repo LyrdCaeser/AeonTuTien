@@ -93,10 +93,65 @@ jobs:
           echo "cdvCompileSdkVersion=33" >> platforms/android/gradle.properties
           echo "cdvTargetSdkVersion=33" >> platforms/android/gradle.properties
           echo "cdvBuildToolsVersion=33.0.2" >> platforms/android/gradle.properties
+<<<<<<< HEAD
 
       - name: Build debug APK
         run: |
           cordova build android --debug -- --packageType=apk --gradleArg=-PcdvCompileSdkVersion=33 --gradleArg=-PcdvTargetSdkVersion=33 --gradleArg=-PcdvBuildToolsVersion=33.0.2
+=======
+
+      - name: Force AEON launcher icon
+        run: |
+          if [ ! -d "cordova-icons" ]; then
+            echo "Missing cordova-icons folder. Upload the icon patch folder to the repository root."
+            exit 1
+          fi
+
+          mkdir -p platforms/android/app/src/main/res/mipmap-ldpi
+          mkdir -p platforms/android/app/src/main/res/mipmap-mdpi
+          mkdir -p platforms/android/app/src/main/res/mipmap-hdpi
+          mkdir -p platforms/android/app/src/main/res/mipmap-xhdpi
+          mkdir -p platforms/android/app/src/main/res/mipmap-xxhdpi
+          mkdir -p platforms/android/app/src/main/res/mipmap-xxxhdpi
+
+          cp cordova-icons/mipmap-ldpi/icon.png platforms/android/app/src/main/res/mipmap-ldpi/icon.png
+          cp cordova-icons/mipmap-mdpi/icon.png platforms/android/app/src/main/res/mipmap-mdpi/icon.png
+          cp cordova-icons/mipmap-hdpi/icon.png platforms/android/app/src/main/res/mipmap-hdpi/icon.png
+          cp cordova-icons/mipmap-xhdpi/icon.png platforms/android/app/src/main/res/mipmap-xhdpi/icon.png
+          cp cordova-icons/mipmap-xxhdpi/icon.png platforms/android/app/src/main/res/mipmap-xxhdpi/icon.png
+          cp cordova-icons/mipmap-xxxhdpi/icon.png platforms/android/app/src/main/res/mipmap-xxxhdpi/icon.png
+
+          for d in platforms/android/app/src/main/res/mipmap-*dpi; do
+            cp "$d/icon.png" "$d/ic_launcher.png"
+            cp "$d/icon.png" "$d/ic_launcher_round.png"
+            cp "$d/icon.png" "$d/ic_launcher_foreground.png"
+          done
+
+          node <<'NODE'
+          const fs = require('fs');
+          const file = 'platforms/android/app/src/main/AndroidManifest.xml';
+          let s = fs.readFileSync(file, 'utf8');
+
+          if (/android:icon=/.test(s)) {
+            s = s.replace(/android:icon="@[^"]*"/, 'android:icon="@mipmap/icon"');
+          } else {
+            s = s.replace(/<application\b/, '<application android:icon="@mipmap/icon"');
+          }
+
+          if (/android:roundIcon=/.test(s)) {
+            s = s.replace(/android:roundIcon="@[^"]*"/, 'android:roundIcon="@mipmap/icon"');
+          } else {
+            s = s.replace(/<application\b/, '<application android:roundIcon="@mipmap/icon"');
+          }
+
+          fs.writeFileSync(file, s);
+          console.log(s.match(/<application[^>]+>/)?.[0] || 'manifest patched');
+          NODE
+
+      - name: Build debug APK
+        run: |
+          cordova build android --debug --no-prepare -- --packageType=apk --gradleArg=-PcdvCompileSdkVersion=33 --gradleArg=-PcdvTargetSdkVersion=33 --gradleArg=-PcdvBuildToolsVersion=33.0.2
+>>>>>>> 3173c3e (Build APK)
 
       - name: Collect APK
         run: |
@@ -107,6 +162,10 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
+<<<<<<< HEAD
           name: Aeon Tu Tiên
+=======
+          name: Aeon - Tu Tiên
+>>>>>>> 3173c3e (Build APK)
           path: artifact/*.apk
           if-no-files-found: error
