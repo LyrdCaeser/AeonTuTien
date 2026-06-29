@@ -1,0 +1,66 @@
+{
+  "name": "aeon-tu-tien",
+  "main": "main.js",
+  "productName": "Aeon - Tu Tiên",
+  "description": "Aeon - Tu Tiên",
+  "author": "Triệu Quang Hổ",
+  "version": "1.0.1",
+  "dependencies": {
+    "@electron/remote": "2.1.2"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "devDependencies": {
+    "electron": "32.3.3",
+    "electron-builder": "26.4.0"
+  },
+  "build": {
+    "appId": "com.aeon.tutienQH",
+    "productName": "Aeon - Tu Tiên",
+    "copyright": "Copyright © 2026 Triệu Quang Hổ",
+    "files": [
+      "app/**/*",
+      "main.js",
+      "package.json",
+      "LICENSE.GDevelop.txt"
+    ],
+    "extraFiles": [
+      "LICENSE.GDevelop.txt"
+    ],
+    "directories": {
+      "buildResources": "buildResources",
+      "output": "dist"
+    },
+    "win": {
+      "icon": "buildResources/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Aeon - Tu Tiên",
+      "artifactName": "${productName} Setup ${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName} Portable ${version}.${ext}"
+    }
+  }
+}

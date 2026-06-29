@@ -1,0 +1,76 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'WINDOWNS/**'
+      - '.github/workflows/build-exe.yml'
+
+jobs:
+  build-exe:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Locate Electron project
+        shell: powershell
+        run: |
+          if (Test-Path "WINDOWNS/package.json") {
+            "PROJECT_DIR=WINDOWNS" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } elseif (Test-Path "package.json") {
+            "PROJECT_DIR=." | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } else {
+            throw "Cannot find package.json. Put the WINDOWNS folder in the repo root."
+          }
+
+      - name: Clean npm registry and old locks
+        shell: powershell
+        run: |
+          cd $env:PROJECT_DIR
+          npm config delete proxy 2>$null
+          npm config delete https-proxy 2>$null
+          npm config set registry https://registry.npmjs.org/
+          if (Test-Path .npmrc) { Remove-Item .npmrc -Force }
+          if (Test-Path package-lock.json) { Remove-Item package-lock.json -Force }
+          if (Test-Path npm-shrinkwrap.json) { Remove-Item npm-shrinkwrap.json -Force }
+          if (Test-Path node_modules) { Remove-Item node_modules -Recurse -Force }
+          npm cache clean --force
+          npm config get registry
+
+      - name: Install dependencies
+        shell: powershell
+        run: |
+          cd $env:PROJECT_DIR
+          npm install --registry=https://registry.npmjs.org/
+
+      - name: Build Windows EXE
+        shell: powershell
+        run: |
+          cd $env:PROJECT_DIR
+          npm run build
+
+      - name: Collect EXE files
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force artifact | Out-Null
+          Get-ChildItem "$env:PROJECT_DIR/dist" -Filter *.exe -Recurse | ForEach-Object {
+            Copy-Item $_.FullName -Destination artifact -Force
+          }
+          Get-ChildItem artifact
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aeon - Tu Tiên
+          path: artifact/*.exe
+          if-no-files-found: error
