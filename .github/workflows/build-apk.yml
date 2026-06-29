@@ -1,0 +1,58 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Install npm dependencies
+        run: npm ci || npm install
+
+      - name: Add Android platform
+        run: |
+          rm -rf platforms/android plugins
+          npx cordova platform add android@15.0.0
+
+      - name: Build debug APK
+        run: npx cordova build android --debug -- --packageType=apk
+
+      - name: Collect APK
+        run: |
+          mkdir -p artifact
+          find platforms/android/app/build/outputs -name "*.apk" -print -exec cp {} artifact/ \;
+          ls -lh artifact
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aeon-Tu-Tien-debug-apk
+          path: artifact/*.apk
+          if-no-files-found: error

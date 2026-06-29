@@ -1,0 +1,39 @@
+{
+  "name": "aeon-tu-tien",
+  "displayName": "Aeon - Tu Tiên",
+  "version": "1.0.1",
+  "description": "Aeon - Tu Tiên",
+  "main": "index.js",
+  "scripts": {
+    "android:add": "cordova platform add android@15.0.0",
+    "android:prepare": "cordova prepare android",
+    "build:apk": "cordova build android --debug -- --packageType=apk",
+    "build:aab": "cordova build android --release -- --packageType=bundle"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "gdevelop",
+    "android",
+    "apk"
+  ],
+  "author": "Triệu Quang Hổ",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "cordova": "^12.0.0"
+  },
+  "devDependencies": {
+    "@gdevelop/cordova-plugin-safariviewcontroller": "^2.1.0",
+    "cordova-android": "^15.0.0",
+    "cordova-plugin-whitelist": "^1.3.5",
+    "es6-promise-plugin": "^4.2.2",
+    "gdevelop-cordova-plugin-screen-orientation": "3.0.4-patch.1"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "gdevelop-cordova-plugin-screen-orientation": {},
+      "@gdevelop/cordova-plugin-safariviewcontroller": {}
+    }
+  }
+}
