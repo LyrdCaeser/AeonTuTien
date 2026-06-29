@@ -62,8 +62,9 @@ jobs:
           function setPref(name, value) {
             const re = new RegExp(`<preference\\s+name=["']${name}["']\\s+value=["'][^"']*["']\\s*/>`, 'i');
             const line = `    <preference name="${name}" value="${value}" />`;
+
             if (re.test(s)) {
-              s = s.replace(re, line.trim());
+              s = s.replace(re, line);
             } else {
               s = s.replace('</widget>', `${line}\n</widget>`);
             }
@@ -91,12 +92,27 @@ jobs:
       - name: Patch Cordova Gradle and force AEON launcher icon
         run: |
           sed -i '1i import groovy.xml.XmlParser' platforms/android/CordovaLib/cordova.gradle || true
-          echo "cdvCompileSdkVersion=33" >> platforms/android/gradle.properties
-          echo "cdvTargetSdkVersion=33" >> platforms/android/gradle.properties
-          echo "cdvBuildToolsVersion=33.0.2" >> platforms/android/gradle.properties
+
+          node <<'NODE'
+          const fs = require('fs');
+          const file = 'platforms/android/gradle.properties';
+
+          let s = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+
+          s = s.replace(/android\.enableJetifier=truecdvCompileSdkVersion=33/g, 'android.enableJetifier=true\ncdvCompileSdkVersion=33');
+          s = s.replace(/^cdvCompileSdkVersion=.*$/gm, '');
+          s = s.replace(/^cdvTargetSdkVersion=.*$/gm, '');
+          s = s.replace(/^cdvBuildToolsVersion=.*$/gm, '');
+          s = s.trimEnd();
+
+          s += '\ncdvCompileSdkVersion=33\ncdvTargetSdkVersion=33\ncdvBuildToolsVersion=33.0.2\n';
+
+          fs.writeFileSync(file, s);
+          console.log(fs.readFileSync(file, 'utf8'));
+          NODE
 
           if [ ! -d "cordova-icons" ]; then
-            echo "Missing cordova-icons folder. Upload the icon patch folder to the repository root."
+            echo "Missing cordova-icons folder. Upload the cordova-icons folder to the repository root."
             exit 1
           fi
 
