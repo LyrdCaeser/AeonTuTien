@@ -1,94 +1,21 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.aeon.tutienQH" version="1.0.1" xmlns="http://www.w3.org/ns/widgets"
-    xmlns:cdv="http://cordova.apache.org/ns/1.0"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>Aeon - Tu Tiên</name>
-    <content src="index.html" />
-    <plugin name="cordova-plugin-whitelist" version="1" />
-    <plugin name="gdevelop-cordova-plugin-screen-orientation" version="3.0.4-patch.1" />
-    <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
-
-    <!-- Allow iframes on iOS like leaderboards, including those in development that are not served
-    via https. -->
-    <allow-navigation href="*" />
-
-    <platform name="android">
-        <allow-intent href="market:*" />
-
-        <!-- Required by admob-plus plugin > version 2 -->
-        <preference name="GradlePluginKotlinEnabled" value="true" />
-
-        <!-- Increase timeout value for low-end android devices -->
-        <preference name="loadUrlTimeoutValue" value="60000" />
-
-        <icon src="www/3a3158528457798f03dfaa5215c643e69a2d02af8c8cc771adc434ee8436d443-android-icon-36.png.png" density="ldpi" />
-<icon src="www/dd9f58033c887290e8fa0e1d4da802ac12ca670668930cca68120c604a433888-android-icon-48.png.png" density="mdpi" />
-<icon src="www/92530bfc63c4392679bdc7b08502c323d30b9b7cba5a8c8f82a4029eb7d61005-android-icon-72.png.png" density="hdpi" />
-<icon src="www/b248202d4b079e1f33f97e97587ac772df4adda57c65ee957ecd768a9ce1dfec-android-icon-96.png.png" density="xhdpi" />
-<icon src="www/a75e3ffb5612d1d4dd500b7afdb54b8f2432945787e0d560fa3e7229695830ff-android-icon-144.png.png" density="xxhdpi" />
-<icon src="www/c88956b67abc2d9fac21d49e07de6d3325c9c307f8f5f8e198a132651bedb445-android-icon-192.png.png" density="xxxhdpi" />
-<preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/a69a0a80ae63aef92002821ed921834d0bb3f1b6bca799e96c04f88409335a04-android-windowSplashScreenAnimatedIcon.png.png" />
-
-        <preference name="AndroidWindowSplashScreenBackground" value="#000000" />
-
-        <!-- Required to get cordova-plugin-safariviewcontroller to call Chrome CustomTabs on
-        Android. -->
-        <config-file target="AndroidManifest.xml" parent="/manifest">
-            <queries>
-                <intent>
-                    <action android:name="android.support.customtabs.action.CustomTabsService" />
-                </intent>
-            </queries>
-        </config-file>
-    </platform>
-    <platform name="ios">
-        <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />
-
-        <preference name="SwiftVersion" value="5.3" />
-
-        <!-- Required by admob-plus plugin > version 2 -->
-        <preference name="deployment-target" value="13.0" />
-
-        <icon src="www/259d48a112817b7bc15e43f79ccf2158e777018d31b81cb00a3d55be09f43b38-ios-icon-180.png.png" width="180" height="180" />
-<icon src="www/c4bf461574430dc0616e98538cc630835d58175c31fc9821ed49dc3cc0d7a17e-ios-icon-60.png.png" width="60" height="60" />
-<icon src="www/50c8f42f8fd8645c329c14d84e8c7fac40708027a1d8e69a55e3942b655e6398-ios-icon-120.png.png" width="120" height="120" />
-<icon src="www/66730846d8542e4e7ac0f267849c6bee2fac2c79cdb1573bfa67a8ac50fa85fc-ios-icon-76.png.png" width="76" height="76" />
-<icon src="www/2479500f3c3b5f9ae267ccae5eb484b6de0ff627be46aa425691f22b33087236-ios-icon-152.png.png" width="152" height="152" />
-<icon src="www/f9c29e46d1c609738c91b27f3ea90e235b8ee61ab99687330d3b0f1d4b8eefd6-ios-icon-40.png.png" width="40" height="40" />
-<icon src="www/bfbffa61409aff14d8d7733115c2ed571cd00bbad175527289c0d3fc0988dc25-ios-icon-80.png.png" width="80" height="80" />
-<icon src="www/a666e295dd3658f8e6a078771209000d8909678a6f61ac956e0ca5a4e3442ae8-ios-icon-57.png.png" width="57" height="57" />
-<icon src="www/51359bd5c7bc8159118afadc63d961d7f9d6dc3b7a7d1ea507b2f99c2d64170d-ios-icon-114.png.png" width="114" height="114" />
-<icon src="www/92530bfc63c4392679bdc7b08502c323d30b9b7cba5a8c8f82a4029eb7d61005-ios-icon-72.png.png" width="72" height="72" />
-<icon src="www/a75e3ffb5612d1d4dd500b7afdb54b8f2432945787e0d560fa3e7229695830ff-ios-icon-144.png.png" width="144" height="144" />
-<icon src="www/b45185d1ef0636ecba3d348345253609b81649ae2201a44d67b61e163a6cf762-ios-icon-167.png.png" width="167" height="167" />
-<icon src="www/3622cd444fb7a0dca648a590fc7db8d8ee777b3d007b1b706efb7efa80847aa3-ios-icon-29.png.png" width="29" height="29" />
-<icon src="www/953c96eb1c92145bf88ed9bf43712f3ff7538b051f646b9aed7b46ac3fe1f446-ios-icon-58.png.png" width="58" height="58" />
-<icon src="www/42a62f7eed63ae51492f910dade649eb69905a86f375db27b1520e21f5ee25b1-ios-icon-87.png.png" width="87" height="87" />
-<icon src="www/2a10cd382e0d5e165c9687362c5ab545ffd6ef3e058391650687f9bd7104e96c-ios-icon-50.png.png" width="50" height="50" />
-<icon src="www/b4a8acd066a02c280b81abd0c33b10a1369dbd28e79e645d51c978ea31ab09c9-ios-icon-20.png.png" width="20" height="20" />
-<icon src="www/d0025780d862dbcff0520dc5bda101155eaaeaccb3814d466dcf6cf98fa6b100-ios-icon-100.png.png" width="100" height="100" />
-<icon src="www/b45185d1ef0636ecba3d348345253609b81649ae2201a44d67b61e163a6cf762-ios-icon-167.png.png" width="167" height="167" />
-<icon src="www/dc497c213e2a0eeaa090f98e164d869ff966bcbb1a7ab150026d0441af1d6213-ios-icon-1024.png.png" width="1024" height="1024" />
-
-    </platform>
-
-    <preference name="AndroidXEnabled" value="true" />
-
-    <preference name="BackgroundColor" value="0xff000000" />
-
-    <!-- Android Fullscreen -->
-    <preference name="Fullscreen" value="true" />
-
-    <!-- Cordova/Phonegap version -->
-    <preference name="phonegap-version" value="cli-9.0.0" />
-
-    <plugin name="@gdevelop/cordova-plugin-safariviewcontroller">
-</plugin>
+<widget id="com.aeontutien.game" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>Aeon Tu Tien</name>
+  <description>Web RPG built with React, Vite and Phaser.</description>
+  <author email="trinhvu24689@gmail.com">AI The Ky 22</author>
+  <content src="index.html" />
+  <access origin="*" />
+  <allow-navigation href="*" />
+  <allow-intent href="http://*/*" />
+  <allow-intent href="https://*/*" />
+  <allow-intent href="tel:*" />
+  <allow-intent href="sms:*" />
+  <allow-intent href="mailto:*" />
+  <allow-intent href="geo:*" />
+  <preference name="android-minSdkVersion" value="24" />
+  <preference name="android-targetSdkVersion" value="35" />
+  <preference name="android-compileSdkVersion" value="35" />
+  <preference name="android-buildToolsVersion" value="35.0.0" />
+  <preference name="Fullscreen" value="true" />
+  <preference name="Orientation" value="landscape" />
 </widget>
