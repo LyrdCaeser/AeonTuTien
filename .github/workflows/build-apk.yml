@@ -32,18 +32,19 @@ jobs:
           yes | sdkmanager --licenses || true
           sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
-      - name: Install Cordova locally
+      - name: Install Cordova globally
         run: |
-          npm install
-          npm install cordova@latest
+          npm cache clean --force
+          npm install -g cordova@12.0.0
+          cordova --version
 
       - name: Prepare Cordova Android project
         run: |
-          rm -rf platforms/android plugins
-          npx cordova platform add android
+          rm -rf platforms plugins
+          cordova platform add android@12.0.1
 
       - name: Build debug APK
-        run: npx cordova build android --debug -- --packageType=apk
+        run: cordova build android --debug -- --packageType=apk
 
       - name: Collect APK
         run: |
