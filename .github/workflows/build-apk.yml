@@ -86,22 +86,15 @@ jobs:
         run: |
           cordova telemetry off
           cordova platform add android@12.0.1 --verbose
+          cordova prepare android
 
-      - name: Patch Cordova Gradle
+      - name: Patch Cordova Gradle and force AEON launcher icon
         run: |
           sed -i '1i import groovy.xml.XmlParser' platforms/android/CordovaLib/cordova.gradle || true
           echo "cdvCompileSdkVersion=33" >> platforms/android/gradle.properties
           echo "cdvTargetSdkVersion=33" >> platforms/android/gradle.properties
           echo "cdvBuildToolsVersion=33.0.2" >> platforms/android/gradle.properties
-<<<<<<< HEAD
 
-      - name: Build debug APK
-        run: |
-          cordova build android --debug -- --packageType=apk --gradleArg=-PcdvCompileSdkVersion=33 --gradleArg=-PcdvTargetSdkVersion=33 --gradleArg=-PcdvBuildToolsVersion=33.0.2
-=======
-
-      - name: Force AEON launcher icon
-        run: |
           if [ ! -d "cordova-icons" ]; then
             echo "Missing cordova-icons folder. Upload the icon patch folder to the repository root."
             exit 1
@@ -150,8 +143,7 @@ jobs:
 
       - name: Build debug APK
         run: |
-          cordova build android --debug --no-prepare -- --packageType=apk --gradleArg=-PcdvCompileSdkVersion=33 --gradleArg=-PcdvTargetSdkVersion=33 --gradleArg=-PcdvBuildToolsVersion=33.0.2
->>>>>>> 3173c3e (Build APK)
+          cordova compile android --debug -- --packageType=apk --gradleArg=-PcdvCompileSdkVersion=33 --gradleArg=-PcdvTargetSdkVersion=33 --gradleArg=-PcdvBuildToolsVersion=33.0.2
 
       - name: Collect APK
         run: |
@@ -162,10 +154,6 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-<<<<<<< HEAD
-          name: Aeon Tu Tiên
-=======
           name: Aeon - Tu Tiên
->>>>>>> 3173c3e (Build APK)
           path: artifact/*.apk
           if-no-files-found: error
