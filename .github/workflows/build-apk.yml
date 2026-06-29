@@ -50,7 +50,32 @@ jobs:
       - name: Install Android SDK packages
         run: |
           yes | sdkmanager --licenses || true
-          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+
+      - name: Force config.xml to SDK 33
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const file = 'config.xml';
+          let s = fs.readFileSync(file, 'utf8');
+
+          function setPref(name, value) {
+            const re = new RegExp(`<preference\\s+name=["']${name}["']\\s+value=["'][^"']*["']\\s*/>`, 'i');
+            const line = `    <preference name="${name}" value="${value}" />`;
+            if (re.test(s)) {
+              s = s.replace(re, line.trim());
+            } else {
+              s = s.replace('</widget>', `${line}\n</widget>`);
+            }
+          }
+
+          setPref('android-minSdkVersion', '23');
+          setPref('android-targetSdkVersion', '33');
+          setPref('android-compileSdkVersion', '33');
+          setPref('android-buildToolsVersion', '33.0.2');
+
+          fs.writeFileSync(file, s);
+          NODE
 
       - name: Install Cordova globally
         run: |
@@ -62,12 +87,16 @@ jobs:
           cordova telemetry off
           cordova platform add android@12.0.1 --verbose
 
-      - name: Patch Cordova Gradle for XML parser
+      - name: Patch Cordova Gradle
         run: |
           sed -i '1i import groovy.xml.XmlParser' platforms/android/CordovaLib/cordova.gradle || true
+          echo "cdvCompileSdkVersion=33" >> platforms/android/gradle.properties
+          echo "cdvTargetSdkVersion=33" >> platforms/android/gradle.properties
+          echo "cdvBuildToolsVersion=33.0.2" >> platforms/android/gradle.properties
 
       - name: Build debug APK
-        run: cordova build android --debug -- --packageType=apk
+        run: |
+          cordova build android --debug -- --packageType=apk --gradleArg=-PcdvCompileSdkVersion=33 --gradleArg=-PcdvTargetSdkVersion=33 --gradleArg=-PcdvBuildToolsVersion=33.0.2
 
       - name: Collect APK
         run: |
